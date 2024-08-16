@@ -11,11 +11,14 @@ import warnings
 def speak_text(command):
     tts = gTTS(text=command, lang='ja')
     tts.save('speech.mp3')
+    voice_file = "speech.mp3"
     if os.name == 'nt':  # For Windows
-        os.system('start speech.mp3')
-    else:  # For MacOS
-        os.system('afplay speech.mp3')
-
+        os.system(f'start {voice_file}')
+    elif os.name == 'posix':  # For MacOS and Linux
+        if os.uname().sysname == 'Darwin':  # MacOS
+            os.system(f'afplay {voice_file}')
+        else:  # Linux
+            os.system(f'ffplay -nodisp -autoexit {voice_file}')
 
 translator = Translator()
 kks = kakasi()
